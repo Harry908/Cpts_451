@@ -5,6 +5,8 @@
 Yelp-CptS451/
 *.csv
 *.sql
+*.txt
+*.json
 ### Database ###
 *.accdb
 *.db

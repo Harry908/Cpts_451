@@ -16,7 +16,7 @@ def getAttributes(attributes):
 def parseBusinessData():
     print("Parsing businesses...")
     #read the JSON file
-    with open('./yelp_business.JSON','r') as f:
+    with open('Yelp-CptS451/yelp_business.JSON','r') as f:
         outfile =  open('./yelp_business.txt', 'w')
         line = f.readline()
         count_line = 0
