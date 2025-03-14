@@ -1,11 +1,12 @@
 # Created by https://www.toptal.com/developers/gitignore/api/python,visualstudio,visualstudiocode,qtcreator,jetbrains,pycharm,database
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,visualstudio,visualstudiocode,qtcreator,jetbrains,pycharm,database
-!requirements.txt
+
 .venv/
 Yelp-CptS451/
 *.csv
 *.sql
 *.txt
+!requirements.txt
 *.json
 ### Database ###
 *.accdb
