@@ -4,7 +4,7 @@ from PyQt5 import uic, QtCore
 from PyQt5.QtGui import QIcon, QPixmap
 import psycopg2
 
-qtCreatorFile = "MileStone1app\Qt5MW.ui" # Enter file here.
+qtCreatorFile = "MileStone1app\mw.ui" # Enter file here.
 
 Ui_MainWindow, QtBaseClass = uic.loadUiType(qtCreatorFile)
 
