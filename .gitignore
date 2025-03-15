@@ -3,7 +3,6 @@
 
 .venv/
 *.csv
-*.sql
 *.txt
 !requirements.txt
 *.json
