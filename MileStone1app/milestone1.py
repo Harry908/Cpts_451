@@ -15,16 +15,17 @@ class myApp(QMainWindow):
         self.ui.setupUi(self)
         self.loadStateList()
         self.ui.stateList.currentIndexChanged.connect(self.stateChanged)
+        self.ui.cityList.itemSelectionChanged.connect(self.cityChanged)
     
     def execQuery(self, sqlStr):
         try:
-            conn=psycopg2.connect("dbname='milestone1' user='postgres' host='localhost' password='0'")
+            conn=psycopg2.connect("dbname='milestone1db' user='postgres' host='localhost' password='0'")
         except Exception as e:
             print("Unable to connect to the database.")
             print(e)
         cur=conn.cursor()
         cur.execute(sqlStr)
-        cur.commit()
+        conn.commit()
         result = cur.fetchall()
         cur.close()
         return result
@@ -35,7 +36,7 @@ class myApp(QMainWindow):
         self.ui.stateList.clearEditText()
         
         # Query the database
-        sqlStr = "SELECT * FROM business ORDER BY state;"
+        sqlStr = "SELECT DISTINCT state FROM business ORDER BY state;"
         try:
             result = self.execQuery(sqlStr)
             
@@ -59,7 +60,7 @@ class myApp(QMainWindow):
         state=self.ui.stateList.currentText()
         
         # Load the city list
-        sqlStr = "SELECT distinct city FROM business WHERE state = '" + state + "' ORDER BY city;"
+        sqlStr = "SELECT DISTINCT city FROM business WHERE state = '" + state + "' ORDER BY city;"
         print('Load city:')
         print(sqlStr)
         self.loadCityList(sqlStr)
@@ -73,7 +74,7 @@ class myApp(QMainWindow):
     # City changed event
     def cityChanged(self):
         # Get the selected city and state
-        if self.ui.cityList.selectedItem() < 0 or self.ui.stateList.currentIndex() < 0:
+        if not self.ui.cityList.selectedItems() or self.ui.stateList.currentIndex() < 0:
             return
         city = self.ui.cityList.selectedItems()[0].text()      
         state = self.ui.stateList.currentText()
@@ -111,14 +112,14 @@ class myApp(QMainWindow):
             results = self.execQuery(sqlStr)
             
             # Styling the table
-            style = "::section {""background-color: #f2f2f2; }"
+            style = "QHeaderView::section { background-color: #2C6D9A; color: white; font-weight: bold; font-size: 18px; font-style: italic; }"
             self.ui.businessTable.horizontalHeader().setStyleSheet(style)
             self.ui.businessTable.setRowCount(len(results))
             self.ui.businessTable.setColumnCount(len(results[0]))
             self.ui.businessTable.setHorizontalHeaderLabels(['Business Name', 'City', 'State'])
             self.ui.businessTable.resizeColumnsToContents()
             self.ui.businessTable.setColumnWidth(0, 300)
-            self.ui.businessTable.setColumnWidth(1, 150)
+            self.ui.businessTable.setColumnWidth(1, 170)
             self.ui.businessTable.setColumnWidth(2, 50)
             
             # Populating the table
