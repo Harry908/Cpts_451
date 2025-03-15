@@ -108,7 +108,7 @@ def parseUserData():
     print("Parsing users...")
     #reading the JSON file
     with open('./yelp_user.JSON','r') as f:
-        outfile =  open('./yelp_user1.txt', 'w')
+        outfile =  open('./yelp_user.txt', 'w')
         line = f.readline()
         count_line = 0
         while line:
