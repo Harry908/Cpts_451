@@ -2,7 +2,6 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,visualstudio,visualstudiocode,qtcreator,jetbrains,pycharm,database
 
 .venv/
-Yelp-CptS451/
 *.csv
 *.sql
 *.txt
