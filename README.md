@@ -32,7 +32,7 @@
 ## 🧱 Tech Stack
 
 - **Python 3.11.9**
-- **PyQT5**
+- **PyQt5**
 - **PostgreSQL**
 - **psycopg2** (Python PostgreSQL adapter)
 - **SQL (DDL, DML)**
