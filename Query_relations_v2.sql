@@ -58,3 +58,11 @@ CREATE TABLE review (
     FOREIGN KEY (business_id) REFERENCES business(business_id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES yelp_user(user_id) ON DELETE CASCADE
 );
+
+CREATE TABLE zipcodeData (
+    zipcode VARCHAR(10) NOT NULL, 
+    medianIncome DECIMAL(15, 2), 
+    meanIncome DECIMAL(15, 2), 
+    population INT,             
+    PRIMARY KEY (zipcode)       
+);
