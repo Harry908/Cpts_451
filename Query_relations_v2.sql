@@ -36,27 +36,13 @@ CREATE TABLE business_check_in (
     FOREIGN KEY (business_id) REFERENCES business(business_id) ON DELETE CASCADE
 );
 
-CREATE TABLE yelp_user (
-    user_id VARCHAR(30) PRIMARY KEY,
-    name VARCHAR(100),
-    review_count INT DEFAULT 0,
-    yelping_since DATE,
-    useful INT DEFAULT 0,
-    funny INT DEFAULT 0,
-    cool INT DEFAULT 0,
-    fans INT DEFAULT 0,
-    average_stars NUMERIC(3,2) CHECK (average_stars >= 0 AND average_stars <= 5)
-);
-
 CREATE TABLE review (
     review_id VARCHAR(30) PRIMARY KEY,
     business_id VARCHAR(30) NOT NULL,
-    user_id VARCHAR(30) NOT NULL,
     stars SMALLINT CHECK (stars >= 0 AND stars <= 5),
     date DATE NOT NULL,
     text TEXT,
-    FOREIGN KEY (business_id) REFERENCES business(business_id) ON DELETE CASCADE,
-    FOREIGN KEY (user_id) REFERENCES yelp_user(user_id) ON DELETE CASCADE
+    FOREIGN KEY (business_id) REFERENCES business(business_id) ON DELETE CASCADE
 );
 
 CREATE TABLE zipcodeData (

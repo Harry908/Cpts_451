@@ -10,8 +10,8 @@ SELECT COUNT(*) FROM business_attribute;
 SELECT COUNT(*) FROM business_check_in;
 481360
 
-SELECT COUNT(*) FROM yelp_user;
-192999
-
 SELECT COUNT(*) FROM review;
 416479
+
+SELECT COUNT(*) FROM zipcodeData;
+32630
