@@ -12,7 +12,7 @@ Ui_MainWindow, QtBaseClass = uic.loadUiType(qtCreatorFile)
 # Main application class
 class myApp(QMainWindow):
 
-    #   ------ 1. Initialization / Setup ------
+    #   ------ Initialization / Setup ------
 
     def __init__(self):
         super(myApp, self).__init__()
@@ -47,6 +47,22 @@ class myApp(QMainWindow):
         self.ui.stateList.clearEditText()
         self.ui.sBox.setCurrentIndex(-1)
         self.ui.sBox.clearEditText()
+
+    #   ------ Database Interaction / Connection ------
+
+    # Executes a SQL query and returns the result
+    def execQuery(self, sqlStr):
+        try:
+            conn = psycopg2.connect("dbname='milestone1db' user='postgres' host='localhost' password='WSUEverett'")
+        except Exception as e:
+            print("Unable to connect to the database.")
+            print(e)
+        cur = conn.cursor()
+        cur.execute(sqlStr)
+        conn.commit()
+        result = cur.fetchall()
+        cur.close()
+        return result
     
     #   --------- For Milestone 1 Only ---------
 
@@ -100,9 +116,9 @@ class myApp(QMainWindow):
 
     #   --------- For Milestone 2 ---------
 
-    #   ------ 2. Event Handlers ------
+    #   ------ Event Handlers ------
 
-    #   --- 2.1 Event Handlers - State and City Selection ---
+    #   --- Event Handlers - State and City Selection ---
 
     # Triggered when state is selected from sBox (used for zipcode view)
     def stateChanged2(self):
@@ -149,7 +165,7 @@ class myApp(QMainWindow):
         print(sqlStr)
         self.updateTables(sqlStr, columns)
 
-    #   --- 2.3 Event Handlers - Zipcode and Category Selection ---
+    #   --- Event Handlers - Zipcode and Category Selection ---
 
     # Triggered when a zipcode is selected
     def zipChanged(self):
@@ -202,7 +218,7 @@ class myApp(QMainWindow):
         print(sqlStr)
         self.updateTables(sqlStr, columns)
 
-    #   --- 2.4 Event Handlers - Button clicks ---
+    #   --- Event Handlers - Button clicks ---
 
     # Clears filter and tables
     def clearFB(self):
@@ -226,7 +242,7 @@ class myApp(QMainWindow):
             return
         self.categoryChanged()
 
-    #   ------ 3. UI Update Helpers ------
+    #   ------ UI Update Helpers ------
 
     # Runs a query and updates all three business tables with results
     def updateTables(self, sqlStr, columns):
@@ -273,7 +289,7 @@ class myApp(QMainWindow):
         for i in reversed(range(uiTable.rowCount())):
             uiTable.removeRow(i)
 
-    #   ------ 4. Table and List Loaders ------
+    #   ------ Table and List Loaders ------
 
     # Load business data into given table
     def loadBusinessTable1(self, results, uiTable, columns: list):
@@ -348,23 +364,7 @@ class myApp(QMainWindow):
             for row in results:
                 uiList.addItem(row[column])
 
-    #   ------ 5. Database Interaction ------
-
-    # Executes a SQL query and returns the result
-    def execQuery(self, sqlStr):
-        try:
-            conn = psycopg2.connect("dbname='milestone1db' user='postgres' host='localhost' password='WSUEverett'")
-        except Exception as e:
-            print("Unable to connect to the database.")
-            print(e)
-        cur = conn.cursor()
-        cur.execute(sqlStr)
-        conn.commit()
-        result = cur.fetchall()
-        cur.close()
-        return result
-    
-#   ------ 6. Main App Entry Point ------
+#   ------ Main App Entry Point ------
 
 # Launch the application
 if __name__ == "__main__":
