@@ -53,7 +53,7 @@ class myApp(QMainWindow):
     # Executes a SQL query and returns the result
     def execQuery(self, sqlStr):
         try:
-            conn = psycopg2.connect("dbname='milestone1db' user='postgres' host='localhost' password='WSUEverett'")
+            conn = psycopg2.connect("dbname='milestone3db' user='postgres' host='localhost' password='WSUEverett'")
         except Exception as e:
             print("Unable to connect to the database.")
             print(e)
@@ -245,13 +245,22 @@ class myApp(QMainWindow):
     #   ------ UI Update Helpers ------
 
     # Runs a query and updates all three business tables with results
-    def updateTables(self, sqlStr, columns):
+    def updateTables(self, baseQuery, columns):
         try:
-            results = self.execQuery(sqlStr)
+            results = self.execQuery(baseQuery)
             self.ui.countLabel.setText(f"{len(results)}")
+
+            # Load original filtered data
             self.loadBusinessTable1(results, self.ui.filterBTable, columns)
-            self.loadBusinessTable1(results, self.ui.popBTable, columns)
-            self.loadBusinessTable1(results, self.ui.sucBTable, columns)
+
+            # Load success-sorted data
+            success_sorted = sorted(results, key=lambda row: float(row[5]) * (float(row[4]) / 5.0), reverse=True)
+            self.loadBusinessTable1(success_sorted, self.ui.sucBTable, columns)
+
+            # Load popularity-sorted data
+            popularity_sorted = sorted(results, key=lambda row: (float(row[5]) * 0.5) + (float(row[3]) / 10.0) + (float(row[4]) * 15.0), reverse=True)
+            self.loadBusinessTable1(popularity_sorted, self.ui.popBTable, columns)
+
         except Exception as e:
             print("Unable to execute query.")
             print(e)

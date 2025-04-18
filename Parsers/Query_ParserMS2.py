@@ -18,9 +18,9 @@ def getAttributes(attributes, parent=''):
 
 # PostgreSQL connection config
 db_params = {
-    'dbname': 'milestone1db',
+    'dbname': 'milestone3db',
     'user': 'postgres',
-    'password': '0',  # <-- replace with your actual password
+    'password': 'WSUEverett',  # <-- replace with your actual password
     'host': 'localhost',
     'port': '5432'
 }
