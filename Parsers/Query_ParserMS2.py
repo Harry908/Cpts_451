@@ -1,6 +1,8 @@
 import json
 import psycopg2
 import traceback
+import dotenv
+import os
 
 def cleanStr4SQL(s):
     return s.replace("'", "''").replace("\n", " ").replace("\r", " ") if isinstance(s, str) else str(s)
@@ -17,12 +19,14 @@ def getAttributes(attributes, parent=''):
     return L
 
 # PostgreSQL connection config
+dotenv.load_dotenv()
+
 db_params = {
-    'dbname': 'milestone3db',
-    'user': 'postgres',
-    'password': 'WSUEverett',  # <-- replace with your actual password
-    'host': 'localhost',
-    'port': '5432'
+    'dbname': os.getenv('DB_NAME'),
+    'user': os.getenv('DB_USER'),
+    'password': os.getenv('DB_PASSWORD'),
+    'host': os.getenv('DB_HOST'),
+    'port': os.getenv('DB_PORT')
 }
 
 conn = psycopg2.connect(**db_params)

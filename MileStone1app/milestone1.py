@@ -3,6 +3,8 @@ import sys
 from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QAction, QTableWidget, QTableWidgetItem, QVBoxLayout
 from PyQt5 import uic, QtCore
 from PyQt5.QtGui import QIcon, QPixmap
+from dotenv import load_dotenv
+import os
 import psycopg2  # PostgreSQL connector
 
 # Load the UI file created using Qt Designer
@@ -53,7 +55,20 @@ class myApp(QMainWindow):
     # Executes a SQL query and returns the result
     def execQuery(self, sqlStr):
         try:
-            conn = psycopg2.connect("dbname='milestone3db' user='postgres' host='localhost' password='WSUEverett'")
+
+            # Load environment variables from .env file
+            load_dotenv()
+
+            # Get database connection details from environment variables
+            dbname = os.getenv('DB_NAME')
+            user = os.getenv('DB_USER')
+            host = os.getenv('DB_HOST')
+            password = os.getenv('DB_PASSWORD')
+            port = os.getenv('DB_PORT')
+
+            # Establish connection
+            conn = psycopg2.connect(dbname=dbname, user=user, host=host, password=password, port=port)
+            print("Connected to the database.")
         except Exception as e:
             print("Unable to connect to the database.")
             print(e)
