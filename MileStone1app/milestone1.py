@@ -150,7 +150,7 @@ class myApp(QMainWindow):
         sqlStr = f"""
         SELECT name, stars, address, numCheckins, reviewrating, reviewcount
         FROM business
-        WHERE state = '{state}';
+        WHERE state = '{state}' ORDER BY name;
         """
         columns = ['Business Name', 'Stars', 'Address', 'Checkins', 'Review Rating', 'Review Count']
         print('Load business by city:')
@@ -173,7 +173,7 @@ class myApp(QMainWindow):
         sqlStr = f"""
         SELECT name, stars, address, numCheckins, reviewrating, reviewcount
         FROM business
-        WHERE state = '{state}' AND city = '{city}';
+        WHERE state = '{state}' AND city = '{city}' ORDER BY name;
         """
         columns = ['Business Name', 'Stars', 'Address', 'Checkins', 'Review Rating', 'Review Count']
         print('Load business by city:')
@@ -206,7 +206,7 @@ class myApp(QMainWindow):
         sqlStr = f"""
         SELECT name, stars, address, numCheckins, reviewrating, reviewcount
         FROM business
-        WHERE state = '{state}' AND city = '{city}' AND zipcode = '{zipcode}';
+        WHERE state = '{state}' AND city = '{city}' AND zipcode = '{zipcode}' ORDER BY name;
         """
         columns = ['Business Name', 'Stars', 'Address', 'Checkins', 'Review Rating', 'Review Count']
         print('Load business by zipcode:')
@@ -226,7 +226,7 @@ class myApp(QMainWindow):
         SELECT name, stars, address, numCheckins, reviewrating, reviewcount
         FROM business
         WHERE state = '{state}' AND city = '{city}' AND zipcode = '{zipcode}' 
-        AND business_id IN (SELECT business_id FROM business_category WHERE cname = '{category}');
+        AND business_id IN (SELECT business_id FROM business_category WHERE cname = '{category}') ORDER BY name;
         """
         columns = ['Business Name', 'Stars', 'Address', 'Checkins', 'Review Rating', 'Review Count']
         print('Load business by category:')
