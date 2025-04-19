@@ -148,11 +148,15 @@ class myApp(QMainWindow):
         self.loadCityList(sqlStr, self.ui.cList2)
         # Load businesses
         sqlStr = f"""
-        SELECT name, stars, address, numCheckins, reviewrating, reviewcount
-        FROM business
-        WHERE state = '{state}' ORDER BY name;
+        SELECT b.name, b.stars, b.address, b.numcheckins, b.reviewrating, b.reviewcount,
+        bl.years_active, bl.avg_reviews_per_year
+        FROM business b
+        LEFT JOIN business_lifetime bl ON b.business_id = bl.business_id
+        WHERE b.state = '{state}'
+        ORDER BY b.name;
         """
-        columns = ['Business Name', 'Stars', 'Address', 'Checkins', 'Review Rating', 'Review Count']
+        columns = ['Business Name', 'Stars', 'Address', 'Checkins', 'Review Rating', 'Review Count', 'Years Active', 'Avg Reviews/Year']
+
         print('Load business by city:')
         print(sqlStr)
         self.updateTables(sqlStr, columns)
@@ -171,11 +175,14 @@ class myApp(QMainWindow):
         self.loadList(sqlStr, self.ui.zipList2)
         # Load businesses
         sqlStr = f"""
-        SELECT name, stars, address, numCheckins, reviewrating, reviewcount
-        FROM business
-        WHERE state = '{state}' AND city = '{city}' ORDER BY name;
+        SELECT b.name, b.stars, b.address, b.numcheckins, b.reviewrating, b.reviewcount,
+        bl.years_active, bl.avg_reviews_per_year
+        FROM business b
+        LEFT JOIN business_lifetime bl ON b.business_id = bl.business_id
+        WHERE b.state = '{state}' AND b.city = '{city}'
+        ORDER BY b.name;
         """
-        columns = ['Business Name', 'Stars', 'Address', 'Checkins', 'Review Rating', 'Review Count']
+        columns = ['Business Name', 'Stars', 'Address', 'Checkins', 'Review Rating', 'Review Count', 'Years Active', 'Avg Reviews/Year']
         print('Load business by city:')
         print(sqlStr)
         self.updateTables(sqlStr, columns)
@@ -204,11 +211,14 @@ class myApp(QMainWindow):
         self.loadCategory(sqlStr)
         # Load businesses
         sqlStr = f"""
-        SELECT name, stars, address, numCheckins, reviewrating, reviewcount
-        FROM business
-        WHERE state = '{state}' AND city = '{city}' AND zipcode = '{zipcode}' ORDER BY name;
+        SELECT b.name, b.stars, b.address, b.numcheckins, b.reviewrating, b.reviewcount,
+        bl.years_active, bl.avg_reviews_per_year
+        FROM business b
+        LEFT JOIN business_lifetime bl ON b.business_id = bl.business_id
+        WHERE b.state = '{state}' AND b.city = '{city}' AND b.zipcode = {zipcode}
+        ORDER BY b.name;
         """
-        columns = ['Business Name', 'Stars', 'Address', 'Checkins', 'Review Rating', 'Review Count']
+        columns = ['Business Name', 'Stars', 'Address', 'Checkins', 'Review Rating', 'Review Count', 'Years Active', 'Avg Reviews/Year']
         print('Load business by zipcode:')
         print(sqlStr)
         self.updateTables(sqlStr, columns)
@@ -223,12 +233,28 @@ class myApp(QMainWindow):
         city = self.ui.cList2.selectedItems()[0].text()
         zipcode = self.ui.zipList2.selectedItems()[0].text()
         sqlStr = f"""
-        SELECT name, stars, address, numCheckins, reviewrating, reviewcount
-        FROM business
-        WHERE state = '{state}' AND city = '{city}' AND zipcode = '{zipcode}' 
-        AND business_id IN (SELECT business_id FROM business_category WHERE cname = '{category}') ORDER BY name;
+        SELECT 
+            b.name, 
+            b.stars, 
+            b.address, 
+            b.numcheckins, 
+            b.reviewrating, 
+            b.reviewcount,
+            bl.years_active, 
+            bl.avg_reviews_per_year
+        FROM business b
+        LEFT JOIN business_lifetime bl ON b.business_id = bl.business_id
+        WHERE b.state = '{state}' 
+        AND b.city = '{city}' 
+        AND b.zipcode = '{zipcode}'
+        AND b.business_id IN (
+            SELECT business_id 
+            FROM business_category 
+            WHERE cname = '{category}'
+        )
+        ORDER BY b.name;
         """
-        columns = ['Business Name', 'Stars', 'Address', 'Checkins', 'Review Rating', 'Review Count']
+        columns = ['Business Name', 'Stars', 'Address', 'Checkins', 'Review Rating', 'Review Count', 'Years Active', 'Avg Reviews/Year']
         print('Load business by category:')
         print(sqlStr)
         self.updateTables(sqlStr, columns)
@@ -279,6 +305,36 @@ class myApp(QMainWindow):
         except Exception as e:
             print("Unable to execute query.")
             print(e)
+
+    def updateTables(self, baseQuery, columns):
+        try:
+            results = self.execQuery(baseQuery)
+            self.ui.countLabel.setText(f"{len(results)}")
+
+            # Load original filtered data
+            self.loadBusinessTable1(results, self.ui.filterBTable, columns)
+
+            # Success Score = Years Active * 5 + Avg Reviews/Year * 3 + ReviewRating * 2
+            success_sorted = sorted(
+                results,
+                key=lambda row: ((float(row[6]) * 5) + (float(row[7]) * 3) + (float(row[4]) * 2)) if row[6] and row[7] else 0,
+                reverse=True
+            )
+
+            # Popularity Score = (Review Count * 0.3) + (Check-ins * 0.7) + (Stars * 2)
+            popularity_sorted = sorted(
+                results,
+                key=lambda row: (float(row[5]) * 0.3) + (float(row[3]) * 0.7) + (float(row[1]) * 2),
+                reverse=True
+            )
+
+            self.loadBusinessTable1(success_sorted, self.ui.sucBTable, columns)
+            self.loadBusinessTable1(popularity_sorted, self.ui.popBTable, columns)
+
+        except Exception as e:
+            print("Unable to execute query.")
+            print(e)
+
 
     # Updates zipcode statistics: number of businesses, population, income
     def updateZipStats(self, state, city, zipcode):
