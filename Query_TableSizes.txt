@@ -15,3 +15,6 @@ SELECT COUNT(*) FROM review;
 
 SELECT COUNT(*) FROM zipcodeData;
 32630
+
+SELECT COUNT(*) FROM business_lifetime; 
+11481

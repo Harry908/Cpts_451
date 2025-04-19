@@ -321,10 +321,10 @@ class myApp(QMainWindow):
                 reverse=True
             )
 
-            # Popularity Score = (Review Count * 0.3) + (Check-ins * 0.7) + (Stars * 2)
+            # Popularity Score = (Review Count * 3) + (Check-ins * 7) + (ReviewRating * 6)
             popularity_sorted = sorted(
                 results,
-                key=lambda row: (float(row[5]) * 0.3) + (float(row[3]) * 0.7) + (float(row[1]) * 2),
+                key=lambda row: (float(row[5]) * 3) + (float(row[3]) * 7) + (float(row[4]) * 6),
                 reverse=True
             )
 
