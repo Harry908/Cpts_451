@@ -269,11 +269,11 @@ class myApp(QMainWindow):
             self.loadBusinessTable1(results, self.ui.filterBTable, columns)
 
             # Load success-sorted data
-            success_sorted = sorted(results, key=lambda row: float(row[5]) * (float(row[4]) / 5.0), reverse=True)
+            success_sorted = sorted(results, key=lambda row: float(row[5]) * (float(row[4]) / 2), reverse=True)
             self.loadBusinessTable1(success_sorted, self.ui.sucBTable, columns)
 
             # Load popularity-sorted data
-            popularity_sorted = sorted(results, key=lambda row: (float(row[5]) * 0.5) + (float(row[3]) / 10.0) + (float(row[4]) * 15.0), reverse=True)
+            popularity_sorted = sorted(results, key=lambda row: (float(row[5]) * 0.3) + (float(row[3]) * 0.7) + (float(row[4]) * 2), reverse=True)
             self.loadBusinessTable1(popularity_sorted, self.ui.popBTable, columns)
 
         except Exception as e:
