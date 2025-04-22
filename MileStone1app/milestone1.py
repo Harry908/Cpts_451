@@ -215,14 +215,18 @@ class myApp(QMainWindow):
         bl.years_active, bl.avg_reviews_per_year
         FROM business b
         LEFT JOIN business_lifetime bl ON b.business_id = bl.business_id
-        WHERE b.state = '{state}' AND b.city = '{city}' AND b.zipcode = {zipcode}
+        WHERE b.state = '{state}' AND b.city = '{city}' AND b.zipcode = '{zipcode}'
         ORDER BY b.name;
         """
         columns = ['Business Name', 'Stars', 'Address', 'Checkins', 'Review Rating', 'Review Count', 'Years Active', 'Avg Reviews/Year']
         print('Load business by zipcode:')
         print(sqlStr)
         self.updateTables(sqlStr, columns)
-
+    
+    def escape_apostrophes(self,input_string):
+        # Replace each single quote with two single quotes
+        return input_string.replace("'", "''")
+    
     # Triggered when a category is selected
     def categoryChanged(self):
         if not self.ui.fCateList.selectedItems() or self.ui.sBox.currentIndex() < 0 \
@@ -250,7 +254,7 @@ class myApp(QMainWindow):
         AND b.business_id IN (
             SELECT business_id 
             FROM business_category 
-            WHERE cname = '{category}'
+            WHERE cname = '{self.escape_apostrophes(category)}'
         )
         ORDER BY b.name;
         """
