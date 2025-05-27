@@ -72,7 +72,6 @@
 ### ✅ Milestone 2
 - Revised ER Diagram and SQL Schema
 - Full Data Insertion & Integrity Constraints
-- Trigger Implementation
 - Popularity & Success Metrics Paper
 - Alpha Application Prototype
 
